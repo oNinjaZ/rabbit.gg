@@ -3,6 +3,8 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers();
+
 var logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateLogger();
@@ -15,5 +17,6 @@ builder.Services.AddScoped<IMessageProducer, MessageProducer>();
 var app = builder.Build();
 
 app.MapGet("/", () => "Hello World!");
+app.MapControllers();
 
 app.Run();
