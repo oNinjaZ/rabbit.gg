@@ -11,6 +11,8 @@ public class OrdersController : ControllerBase
 {
     private readonly ILogger<OrdersController> _logger;
     private readonly IMessageProducer _messageProducer;
+
+    // in-mem storage
     private static readonly List<Order> _orders = new();
 
     public OrdersController(IMessageProducer messageProducer, ILogger<OrdersController> logger)
