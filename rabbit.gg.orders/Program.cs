@@ -5,29 +5,38 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
+using Serilog;
+using rabbit.gg.orders.Services;
+using Microsoft.Extensions.DependencyInjection;
+using rabbit.gg.orders.Data;
 
 using var host = Host.CreateDefaultBuilder()
     .ConfigureAppConfiguration((hostingContext, config) =>
     {
         var envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-        Console.WriteLine($"Environment: {envName}");        
+        Console.WriteLine($"Environment: {envName}");
 
         config.AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: true)
-            .AddJsonFile(path: $"appsettings.{envName}.json", optional: true, reloadOnChange: true)
+            .AddJsonFile(path: $"appsettings.{envName ?? "Production"}.json", optional: true, reloadOnChange: true)
             .AddEnvironmentVariables();
+
+        Log.Logger = new LoggerConfiguration()
+            .ReadFrom.Configuration(config.Build())
+            .CreateLogger();
+    })
+    .UseSerilog()
+    .ConfigureServices((ctx, services) =>
+    {
+        services.AddSingleton<EmailService>();
+        services.AddSingleton<IMQConnectionFactory>(_ => new RMQConnectionFactory(
+            ctx.Configuration.GetValue<string>("RabbitMQ:HostName")!, 
+            ctx.Configuration.GetValue<string>("RabbitMQ:UserName")!, 
+            ctx.Configuration.GetValue<string>("RabbitMQ:Password")!));
     })
     .Build();
 
-
-
-Console.WriteLine("Welcome to Rabbit.gg Orders!");
-
-var connection = new ConnectionFactory()
-{
-    HostName = "localhost",
-    UserName = "user",
-    Password = "password"
-}.CreateConnection();
+var connection = host.Services.GetRequiredService<IMQConnectionFactory>().
+    CreateConnection();
 
 using var channel = connection.CreateModel();
 
