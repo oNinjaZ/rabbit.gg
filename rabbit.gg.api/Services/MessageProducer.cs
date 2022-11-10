@@ -15,7 +15,7 @@ public class MessageProducer : IMessageProducer
 
     public void PublishMessage<T>(T message)
     {
-        var connection = new ConnectionFactory()
+        using var connection = new ConnectionFactory()
         {
             HostName = "localhost",
             UserName = "user",
@@ -28,7 +28,10 @@ public class MessageProducer : IMessageProducer
         channel.QueueDeclare(
             queue: "orders",
             durable: true,
-            exclusive: true);
+            exclusive: false);
+        
+        // channel.Queue(
+        //     queue: "orders");
 
         var body = Encoding.UTF8.GetBytes(
             JsonSerializer.Serialize(message));

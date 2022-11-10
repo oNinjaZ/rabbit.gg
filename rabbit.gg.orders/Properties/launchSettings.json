@@ -1,0 +1,11 @@
+﻿{
+  "profiles": {
+    "rabbit.gg.orders": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": true
+    }
+  }
+}

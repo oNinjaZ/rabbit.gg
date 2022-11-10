@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3.11.2-management-alpine
+    hostname: rabbitmq-dev
+    container_name: rabbitmq-dev
+    ports:
+      # rabbit mq instance
+      - 5672:5672
+      # management ui
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=password
+    # volumes:
+    #   - ./rabbitmq/data:/var/lib/rabbitmq
+  
+    
