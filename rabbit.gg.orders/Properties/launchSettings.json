@@ -1,11 +1,12 @@
 ﻿{
-  "profiles": {
-    "rabbit.gg.orders": {
-      "commandName": "Project",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "dotnetRunMessages": true
-    }
-  }
+	"profiles": {
+		"rabbit.gg.orders": {
+			"commandName": "Project",
+      "dotnetRunMessages": true,
+			"environmentVariables": {
+				"ASPNETCORE_ENVIRONMENT": "Development"
+			},
+      "applicationUrl": "http://localhost:5015"
+		}
+	}
 }

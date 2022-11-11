@@ -16,13 +16,12 @@ public class RMQConnectionFactory : IMQConnectionFactory
     }
 
     public IConnection CreateConnection()
-    {
-        return new ConnectionFactory()
+        => new ConnectionFactory
         {
             HostName = _hostName,
             UserName = _userName,
             Password = _password
         }.CreateConnection();
-    }
+
 }
 
